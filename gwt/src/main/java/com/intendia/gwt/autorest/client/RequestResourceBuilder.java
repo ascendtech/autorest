@@ -32,9 +32,9 @@ public class RequestResourceBuilder extends CollectorResourceVisitor {
         XMLHttpRequest xhr = new XMLHttpRequest(); xhr.open(data.method(), data.uri()); return xhr;
     };
     public static final BiFunction<Single<XMLHttpRequest>, RequestResourceBuilder, Single<XMLHttpRequest>> DEFAULT_REQUEST_TRANSFORMER = (xml, data) -> xml;
-    public static final Function<XMLHttpRequest, FailedStatusCodeException> DEFAULT_UNEXPECTED_MAPPER = xhr -> {
-        return new FailedStatusCodeException(xhr.status, xhr.statusText);
-    };
+    public static final Function<XMLHttpRequest, RequestResponseException.FailedStatusCodeException> DEFAULT_UNEXPECTED_MAPPER = xhr -> new RequestResponseException.FailedStatusCodeException(
+            xhr.status, xhr.responseText);
+
 
     private Function<RequestResourceBuilder, XMLHttpRequest> requestFactory = DEFAULT_REQUEST_FACTORY;
     private Function<XMLHttpRequest, FailedStatusCodeException> unexpectedMapper = DEFAULT_UNEXPECTED_MAPPER;
@@ -58,29 +58,51 @@ public class RequestResourceBuilder extends CollectorResourceVisitor {
     }
 
     @SuppressWarnings("unchecked")
-    @Override public <T> T as(Class<? super T> container, Class<?> type) {
-        if (Completable.class.equals(container)) return (T) request().toCompletable();
-        if (Maybe.class.equals(container)) return (T) request().flatMapMaybe(ctx -> {
-            @Nullable Object decode = decode(ctx);
-            return decode == null ? Maybe.empty() : Maybe.just(decode);
-        });
-        if (Single.class.equals(container)) return (T) request().map(ctx -> {
-            @Nullable Object decode = decode(ctx);
-            return requireNonNull(decode, "null response forbidden, use Maybe instead");
-        });
-        if (Observable.class.equals(container)) return (T) request().toObservable().flatMapIterable(ctx -> {
-            @Nullable Object[] decode = decode(ctx);
-            return decode == null ? Collections.emptyList() : Arrays.asList(decode);
-        });
+    @Override
+    public <T> T as(Class<? super T> container, Class<?> type) {
+        if (Completable.class.equals(container))
+            return (T) request().toCompletable();
+        if (Maybe.class.equals(container))
+            return (T) request().flatMapMaybe(ctx -> {
+                @Nullable Object decode = decode(ctx);
+                return decode == null ? Maybe.empty() : Maybe.just(decode);
+            });
+        if (Single.class.equals(container))
+            return (T) request().map(ctx -> {
+                @Nullable Object decode = decode(ctx);
+                return requireNonNull(decode, "null response forbidden, use Maybe instead");
+            });
+        if (Observable.class.equals(container))
+            return (T) request().toObservable().flatMapIterable(ctx -> {
+                @Nullable Object[] decode = decode(ctx);
+                return decode == null ? Collections.emptyList() : Arrays.asList(decode);
+            });
         throw new UnsupportedOperationException("unsupported type " + container);
     }
 
-    private @Nullable <T> T decode(XMLHttpRequest ctx) {
+    private @Nullable
+    <T> T decode(XMLHttpRequest ctx) {
         try {
             String text = ctx.response.asString();
-            return text == null || text.isEmpty() ? null : Js.cast(Global.JSON.parse(text));
-        } catch (Throwable e) {
-            throw new ResponseFormatException("Parsing response error", e);
+            if (text != null && !text.isEmpty()) {
+                return Js.cast(Global.JSON.parse(text));
+            }
+
+            return null;
+        }
+        catch (Throwable e) {
+            if (ctx.response.isString()) {
+                return Js.cast(ctx.response.asString());
+            }
+            else {
+                try {
+                    Js.cast(Global.JSON.parse(ctx.response.asString()));
+                }
+                catch (Throwable e2) {
+                    throw new RequestResponseException.ResponseFormatException("Parsing response error", e);
+                }
+            }
+            throw new RequestResponseException.ResponseFormatException("Parsing response error", e);
         }
     }
 
