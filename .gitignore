@@ -21,3 +21,7 @@ www-test/
 *.log
 *.launch
 dependency-reduced-pom.xml
+
+**/build
+**/target
+.gradle
