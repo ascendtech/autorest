@@ -1,5 +1,5 @@
 plugins {
-    id("com.intendia.gwt.autorest.java-conventions")
+    id("us.ascend-tech.autorest.java-conventions")
 }
 
 dependencies {

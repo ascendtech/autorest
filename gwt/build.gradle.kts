@@ -1,9 +1,8 @@
 plugins {
-    id("com.intendia.gwt.autorest.java-conventions")
+    id("us.ascend-tech.autorest.java-conventions")
 }
 
 dependencies {
-    implementation(project(":autorest-core"))
     implementation(project(":autorest-core"))
     implementation("com.intendia.gwt:rxjava2-gwt:2.2.10-gwt1")
     implementation("com.intendia.gwt:rxjava2-gwt:2.2.10-gwt1")
