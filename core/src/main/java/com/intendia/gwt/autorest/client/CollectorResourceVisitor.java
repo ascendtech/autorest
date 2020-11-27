@@ -7,7 +7,7 @@ import static java.util.Collections.emptyList;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import javax.annotation.Nullable;
+
 import javax.ws.rs.HttpMethod;
 
 /* @Experimental */
@@ -71,19 +71,19 @@ public abstract class CollectorResourceVisitor implements ResourceVisitor {
         return this;
     }
 
-    @Override public ResourceVisitor param(String key, @Nullable Object value) {
+    @Override public ResourceVisitor param(String key, Object value) {
         Objects.requireNonNull(key, "query param key required");
         if (value != null) queryParams.add(new Param(key, value));
         return this;
     }
 
-    @Override public ResourceVisitor header(String key, @Nullable Object value) {
+    @Override public ResourceVisitor header(String key, Object value) {
         Objects.requireNonNull(key, "header param key required");
         if (value != null) headerParams.add(new Param(key, value));
         return this;
     }
 
-    @Override public ResourceVisitor form(String key, @Nullable Object value) {
+    @Override public ResourceVisitor form(String key, Object value) {
         Objects.requireNonNull(key, "form param key required");
         if (value != null) formParams.add(new Param(key, value));
         return this;

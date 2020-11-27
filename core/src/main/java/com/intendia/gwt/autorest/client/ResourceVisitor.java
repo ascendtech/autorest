@@ -1,6 +1,6 @@
 package com.intendia.gwt.autorest.client;
 
-import javax.annotation.Nullable;
+
 
 /** Visit each resource gathering the metadata and end up calling {@link #as(Class, Class)}. */
 public interface ResourceVisitor {
@@ -18,13 +18,13 @@ public interface ResourceVisitor {
     ResourceVisitor consumes(String... consumes);
 
     /** Sets a query param. */
-    ResourceVisitor param(String key, @Nullable Object value);
+    ResourceVisitor param(String key, Object value);
 
     /** Sets a header param. */
-    ResourceVisitor header(String key, @Nullable Object value);
+    ResourceVisitor header(String key, Object value);
 
     /** Sets a from param. */
-    ResourceVisitor form(String key, @Nullable Object value);
+    ResourceVisitor form(String key, Object value);
 
     /** Sets the content data. */
     ResourceVisitor data(Object data);

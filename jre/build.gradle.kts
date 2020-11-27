@@ -9,7 +9,7 @@ dependencies {
     implementation("io.reactivex.rxjava2:rxjava:2.2.10")
     implementation("com.google.code.gson:gson:2.8.6")
     testAnnotationProcessor(project(":autorest-processor"))
-    testImplementation("junit:junit:4.12")
+    testImplementation("junit:junit:4.13.1")
 }
 
 description = "AutoREST :: JRE"
