@@ -15,4 +15,5 @@ dependencies {
     testAnnotationProcessor(project(":autorest-processor"))
 }
 
-description = "AutoREST :: Processor"
+description = "autorest-processor"
+
