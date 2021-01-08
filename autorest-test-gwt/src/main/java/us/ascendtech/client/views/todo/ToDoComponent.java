@@ -21,14 +21,9 @@ import us.ascendtech.gwt.autorest.client.CompletableCallback;
 import us.ascendtech.gwt.autorest.client.MultipleCallback;
 import us.ascendtech.gwt.autorest.client.SingleCallback;
 
-import java.util.function.Consumer;
-
 @Component
 public class ToDoComponent implements IsVueComponent, HasBeforeMount, HasCreated, ResizeHandler {
 
-	private Consumer<Throwable> err = e -> {
-
-	};
 
 	@Data
 	String error;
