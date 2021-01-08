@@ -105,8 +105,7 @@ public class AutoRestGwtProcessor extends AbstractProcessor {
 				.superclass(RestServiceModel.class).addSuperinterface(TypeName.get(restService.asType()));
 
 		modelTypeBuilder.addMethod(MethodSpec.constructorBuilder().addAnnotation(Inject.class).addModifiers(PUBLIC)
-				.addParameter(TypeName.get(RequestResourceBuilder.class), "resource", FINAL).addStatement("super(resource).path($S); } })", "resource", rsPath)
-				.build());
+				.addParameter(TypeName.get(RequestResourceBuilder.class), "resource", FINAL).addStatement("super(resource.path($S));", rsPath).build());
 
 		List<ExecutableElement> methods = restService.getEnclosedElements().stream()
 				.filter(e -> e.getKind() == ElementKind.METHOD && e instanceof ExecutableElement).map(e -> (ExecutableElement) e)
@@ -123,7 +122,7 @@ public class AutoRestGwtProcessor extends AbstractProcessor {
 				continue;
 			}
 
-			CodeBlock.Builder builder = CodeBlock.builder().add("$[return ");
+			CodeBlock.Builder builder = CodeBlock.builder().add("$[");
 
 			// method type
 			builder.add("method($L)", methodImport(methodImports,
@@ -132,8 +131,7 @@ public class AutoRestGwtProcessor extends AbstractProcessor {
 			// resolve paths
 			builder.add(".path($L)",
 					Arrays.stream(ofNullable(method.getAnnotation(Path.class)).map(Path::value).orElse("").split("/")).filter(s -> !s.isEmpty())
-							.map(path -> !path.startsWith("{") ?
-									"\"" + path + "\"" :
+							.map(path -> !path.startsWith("{") ? "\"" + path + "\"" :
 									method.getParameters().stream()
 											.filter(a -> ofNullable(a.getAnnotation(PathParam.class)).map(PathParam::value).map(v -> path.equals("{" + v + "}"))
 													.orElse(false)).findFirst().map(VariableElement::getSimpleName).map(Object::toString)
