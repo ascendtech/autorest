@@ -188,7 +188,7 @@ public class RequestResourceBuilder {
 	public String uri() {
 		String out = base;
 		for (String pathComponent : paths) {
-			out += "/" + encodeComponent(pathComponent);
+			out += "/" + pathComponent;
 		}
 		return out + query();
 	}

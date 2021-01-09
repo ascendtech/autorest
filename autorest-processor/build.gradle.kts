@@ -1,7 +1,3 @@
-plugins {
-    id("us.ascend-tech.autorest.java-conventions")
-}
-
 dependencies {
     implementation(project(":autorest-core"))
     implementation("javax.ws.rs:jsr311-api:1.1.1")

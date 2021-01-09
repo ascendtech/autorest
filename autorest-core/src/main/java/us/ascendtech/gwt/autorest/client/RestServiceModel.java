@@ -1,13 +1,16 @@
 package us.ascendtech.gwt.autorest.client;
 
 public class RestServiceModel {
-	protected final RequestResourceBuilder path;
+	protected final String baseUrl;
+	private final String servicePath;
 
-	public RestServiceModel(RequestResourceBuilder path) {
-		this.path = path;
+	public RestServiceModel(String baseUrl, String servicePath) {
+		this.baseUrl = baseUrl;
+		this.servicePath = servicePath;
 	}
 
 	protected RequestResourceBuilder method(String method) {
-		return path.method(method);
+		RequestResourceBuilder requestResourceBuilder = new RequestResourceBuilder(baseUrl);
+		return requestResourceBuilder.method(method).path(servicePath);
 	}
 }

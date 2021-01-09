@@ -56,7 +56,7 @@ public class ToDoComponent implements IsVueComponent, HasBeforeMount, HasCreated
 			ToDoDTO newToDoDTO = new ToDoDTO();
 			newToDoDTO.setTodo(inputTodo);
 			rowData.push(newToDoDTO);
-			ServiceProvider.get().getTodoServiceClient().addToDo(newToDoDTO, new SingleCallback<>() {
+			ServiceProvider.get().getTodoServiceClient().addToDo(newToDoDTO, new SingleCallback<ToDoDTO>() {
 				@Override
 				public void onData(ToDoDTO data) {
 					newToDoDTO.setId(data.getId());
@@ -117,7 +117,7 @@ public class ToDoComponent implements IsVueComponent, HasBeforeMount, HasCreated
 
 		rowData = new JsArray<>();
 
-		ServiceProvider.get().getTodoServiceClient().getCurrentToDos(new MultipleCallback<>() {
+		ServiceProvider.get().getTodoServiceClient().getCurrentToDos(new MultipleCallback<ToDoDTO>() {
 			@Override
 			public void onData(ToDoDTO[] data) {
 				rowData.push(data);

@@ -1,7 +1,6 @@
 package us.ascendtech.client.services;
 
 import elemental2.dom.DomGlobal;
-import us.ascendtech.gwt.autorest.client.RequestResourceBuilder;
 
 /**
  * Created by Payam Meyer on 5/13/15.
@@ -19,7 +18,7 @@ public class ServiceProvider {
 
 	private ServiceProvider() {
 		String baseUrl = DomGlobal.window.location.protocol + "//" + DomGlobal.window.location.host;
-		todoServiceClient = new ToDoServiceClientRestServiceModel(new RequestResourceBuilder(baseUrl));
+		todoServiceClient = new ToDoServiceClientRestServiceModel(baseUrl);
 	}
 
 	public ToDoServiceClient getTodoServiceClient() {

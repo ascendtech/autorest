@@ -1,6 +1,6 @@
 plugins {
-    id("us.ascend-tech.autorest.java-conventions")
-    id("us.ascendtech.gwt.modern") version "0.5.9"
+    id("us.ascendtech.gwt.lib")
+    id("us.ascendtech.gwt.modern")
 }
 
 gwt {
@@ -12,26 +12,9 @@ gwt {
     libs.add("ast-momentjs")
 }
 
-sourceSets {
-    main {
-        java {
-            srcDir("src/main/java")
-        }
-        resources {
-            srcDir("src/main/java")
-        }
-    }
-}
-
-tasks.withType<JavaCompile> {
-    options.isDebug = true
-    options.debugOptions.debugLevel = "source,lines,vars"
-    options.encoding = "UTF-8"
-    options.compilerArgs.add("-parameters")
-}
-
 dependencies {
-    implementation(project(":autorest-core"))
+    compile(project(":autorest-core"))
     annotationProcessor(project(":autorest-processor"))
+    annotationProcessor("com.axellience:vue-gwt-processors:1.0.1")
 }
 

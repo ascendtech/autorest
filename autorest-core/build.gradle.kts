@@ -1,5 +1,5 @@
 plugins {
-    id("us.ascend-tech.autorest.java-conventions")
+    id("us.ascendtech.gwt.lib")
 }
 
 dependencies {

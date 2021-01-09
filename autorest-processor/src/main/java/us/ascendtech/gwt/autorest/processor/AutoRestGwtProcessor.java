@@ -9,7 +9,6 @@ import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
 import us.ascendtech.gwt.autorest.client.AutoRestGwt;
-import us.ascendtech.gwt.autorest.client.RequestResourceBuilder;
 import us.ascendtech.gwt.autorest.client.RestServiceModel;
 
 import javax.annotation.processing.AbstractProcessor;
@@ -104,8 +103,9 @@ public class AutoRestGwtProcessor extends AbstractProcessor {
 		TypeSpec.Builder modelTypeBuilder = TypeSpec.classBuilder(modelName.simpleName()).addOriginatingElement(restService).addModifiers(Modifier.PUBLIC)
 				.superclass(RestServiceModel.class).addSuperinterface(TypeName.get(restService.asType()));
 
-		modelTypeBuilder.addMethod(MethodSpec.constructorBuilder().addAnnotation(Inject.class).addModifiers(PUBLIC)
-				.addParameter(TypeName.get(RequestResourceBuilder.class), "resource", FINAL).addStatement("super(resource.path($S));", rsPath).build());
+		modelTypeBuilder.addMethod(
+				MethodSpec.constructorBuilder().addAnnotation(Inject.class).addModifiers(PUBLIC).addParameter(TypeName.get(String.class), "baseUrl", FINAL)
+						.addStatement("super($L, $S);", "baseUrl", rsPath).build());
 
 		List<ExecutableElement> methods = restService.getEnclosedElements().stream()
 				.filter(e -> e.getKind() == ElementKind.METHOD && e instanceof ExecutableElement).map(e -> (ExecutableElement) e)
