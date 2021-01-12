@@ -29,7 +29,7 @@ subprojects {
     artifacts.add("archives", sourcesJar)
 
     defaultTasks("build")
-    group = "us.ascendtech.examples"
+    group = "us.ascendtech.simplerest"
 
 
     repositories {

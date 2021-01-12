@@ -1,6 +1,6 @@
-include(":autorest-processor")
-include(":autorest-core")
-include(":autorest-test-rest")
-include(":autorest-test-gwt")
+include(":simplerest-processor")
+include(":simplerest-core")
+include(":simplerest-test-rest")
+include(":simplerest-test-gwt")
 
 
